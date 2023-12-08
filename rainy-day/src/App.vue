@@ -4,4 +4,7 @@
 <script>
 export default {}
 </script>
-<style></style>
+<style lang="scss">
+@import '@/assets/scss/reset.scss';
+@import '@/assets/scss/global.scss';
+</style>
