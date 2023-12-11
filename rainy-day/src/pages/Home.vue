@@ -7,19 +7,29 @@
       :title="item.title"
       :latitude="item.latitude"
       :longitude="item.longitude" />
-    <button type="button">장소 추가</button>
+    <button
+      type="button"
+      @click="handleShowModal">
+      장소 추가
+    </button>
   </main>
+  <AddLocationModal
+    v-if="isShowModal"
+    @closeModal="handleShowModal" />
 </template>
 <script>
 import CurrentLocationWeather from '@/components/CurrentLocationWeather.vue'
+import AddLocationModal from '@/components/AddLocationModal.vue'
 export default {
   name: 'Home',
   components: {
     CurrentLocationWeather,
+    AddLocationModal,
   },
   data() {
     return {
       location: [],
+      isShowModal: false,
     }
   },
   created() {
@@ -36,6 +46,11 @@ export default {
         this.location.push({title: '기본위치', latitude: 37.552987017, longitude: 126.972591728})
       }
     )
+  },
+  methods: {
+    handleShowModal() {
+      this.isShowModal = !this.isShowModal
+    },
   },
 }
 </script>

@@ -7,9 +7,7 @@
       <table>
         weather info
       </table>
-      <div
-        ref="map"
-        id="map"></div>
+      <div id="map"></div>
     </div>
   </section>
 </template>
