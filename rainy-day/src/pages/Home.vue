@@ -23,14 +23,19 @@ export default {
     }
   },
   created() {
-    if (!('geolocation' in navigator)) {
+    if (!navigator.geolocation) {
       return
     }
-    navigator.geolocation.getCurrentPosition((position) => {
-      const latitude = position.coords.latitude
-      const longitude = position.coords.longitude
-      this.location.push({title: '현위치', latitude, longitude})
-    })
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const latitude = position.coords.latitude
+        const longitude = position.coords.longitude
+        this.location.push({title: '현위치', latitude, longitude})
+      },
+      () => {
+        this.location.push({title: '기본위치', latitude: 37.552987017, longitude: 126.972591728})
+      }
+    )
   },
 }
 </script>
