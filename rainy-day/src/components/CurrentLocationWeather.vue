@@ -1,6 +1,6 @@
 <template lang="">
   <section>
-    <h2>현재위치</h2>
+    <h2>{{ title }}</h2>
     <div id="info">
       <table>
         weather info
@@ -22,6 +22,7 @@ export default {
     }
   },
   props: {
+    title: String,
     latitude: Number,
     longitude: Number,
   },
