@@ -1,6 +1,8 @@
 <template lang="">
   <section>
-    <h2>{{ title }}</h2>
+    <h2>
+      {{ title }} <span>{{ address }}</span>
+    </h2>
     <div id="info">
       <table>
         weather info
@@ -19,6 +21,7 @@ export default {
     return {
       map: null,
       markers: [],
+      address: '',
     }
   },
   props: {
@@ -32,7 +35,7 @@ export default {
       this.initMap()
     } else {
       const script = document.createElement('script')
-      script.src = '//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=15c0e35831cafc8c9883fd79e26612d8'
+      script.src = '//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=15c0e35831cafc8c9883fd79e26612d8&autoload=false&libraries=services'
       document.head.appendChild(script)
       script.onload = () => window.kakao.maps.load(this.initMap)
     }
@@ -48,6 +51,7 @@ export default {
       this.map.setZoomable(false)
       this.map.setDraggable(false)
       this.displayMarker([[this.latitude, this.longitude]])
+      this.getAddress()
     },
     displayMarker(markerPositions) {
       if (this.markers.length > 0) {
@@ -69,6 +73,12 @@ export default {
 
         this.map.setBounds(bounds)
       }
+    },
+    getAddress() {
+      const geocoder = new window.kakao.maps.services.Geocoder()
+      geocoder.coord2RegionCode(this.longitude, this.latitude, (result) => {
+        this.address = result[0].address_name
+      })
     },
   },
 }
