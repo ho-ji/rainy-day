@@ -42,9 +42,11 @@ export default {
       const container = document.getElementById('map')
       const options = {
         center: new window.kakao.maps.LatLng(this.latitude, this.longitude),
-        level: 5,
+        level: 6,
       }
       this.map = new window.kakao.maps.Map(container, options)
+      this.map.setZoomable(false)
+      this.map.setDraggable(false)
       this.displayMarker([[this.latitude, this.longitude]])
     },
     displayMarker(markerPositions) {
