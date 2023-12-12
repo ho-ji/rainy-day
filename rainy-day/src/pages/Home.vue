@@ -8,28 +8,29 @@
       :latitude="item.latitude"
       :longitude="item.longitude" />
     <button
+      v-if="!isShowCard"
       type="button"
-      @click="handleShowModal">
+      @click="showCard">
       장소 추가
     </button>
+    <AddLocationCard
+      v-else
+      @show="showCard" />
   </main>
-  <AddLocationModal
-    v-if="isShowModal"
-    @closeModal="handleShowModal" />
 </template>
 <script>
 import CurrentLocationWeather from '@/components/CurrentLocationWeather.vue'
-import AddLocationModal from '@/components/AddLocationModal.vue'
+import AddLocationCard from '@/components/AddLocationCard.vue'
 export default {
   name: 'Home',
   components: {
     CurrentLocationWeather,
-    AddLocationModal,
+    AddLocationCard,
   },
   data() {
     return {
       location: [],
-      isShowModal: false,
+      isShowCard: false,
     }
   },
   created() {
@@ -48,8 +49,8 @@ export default {
     )
   },
   methods: {
-    handleShowModal() {
-      this.isShowModal = !this.isShowModal
+    showCard() {
+      this.isShowCard = !this.isShowCard
     },
   },
 }
