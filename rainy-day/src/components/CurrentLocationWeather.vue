@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       map: null,
-      markers: [],
+      marker: null,
       address: '',
     }
   },
@@ -28,55 +28,50 @@ export default {
     longitude: Number,
   },
   mounted() {
-    if (!this.latitude || !this.longitude) return null
-    if (window.kakao && window.kakao.maps) {
+    if (window.naver && window.naver.maps) {
       this.initMap()
     } else {
       const script = document.createElement('script')
-      script.src = '//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=15c0e35831cafc8c9883fd79e26612d8&autoload=false&libraries=services'
+      script.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=afcltvotp4&submodules=geocoder'
+      script.onload = () => (window.naver.maps.onJSContentLoaded = this.initMap)
       document.head.appendChild(script)
-      script.onload = () => window.kakao.maps.load(this.initMap)
     }
   },
   methods: {
     initMap() {
       const container = document.getElementById('map')
       const options = {
-        center: new window.kakao.maps.LatLng(this.latitude, this.longitude),
-        level: 6,
+        center: new window.naver.maps.LatLng(this.latitude, this.longitude),
+        zoom: 15,
+        disableDoubleClickZoom: true,
+        disableDoubleTapZoom: true,
+        draggable: false,
+        keyboardShortcuts: false,
+        scrollWheel: false,
       }
-      this.map = new window.kakao.maps.Map(container, options)
-      this.map.setZoomable(false)
-      this.map.setDraggable(false)
-      this.displayMarker([[this.latitude, this.longitude]])
+      this.map = new window.naver.maps.Map(container, options)
+      this.markers = new window.naver.maps.Marker({
+        position: new window.naver.maps.LatLng(this.latitude, this.longitude),
+        map: this.map,
+      })
       this.getAddress()
     },
-    displayMarker(markerPositions) {
-      if (this.markers.length > 0) {
-        this.markers.forEach((marker) => marker.setMap(null))
-      }
-
-      const positions = markerPositions.map((position) => new window.kakao.maps.LatLng(...position))
-
-      if (positions.length > 0) {
-        this.markers = positions.map(
-          (position) =>
-            new window.kakao.maps.Marker({
-              map: this.map,
-              position,
-            })
-        )
-
-        const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new window.kakao.maps.LatLngBounds())
-
-        this.map.setBounds(bounds)
-      }
-    },
     getAddress() {
-      const geocoder = new window.kakao.maps.services.Geocoder()
-      geocoder.coord2RegionCode(this.longitude, this.latitude, (result) => {
-        this.address = result[0].address_name
-      })
+      window.naver.maps.Service.reverseGeocode(
+        {
+          coords: new window.naver.maps.LatLng(this.latitude, this.longitude),
+          orders: window.naver.maps.Service.OrderType.ADDR,
+        },
+        (status, response) => {
+          if (status === window.naver.maps.Service.Status.ERROR) return
+          const result = response.v2.results[0].region
+          for (const key in result) {
+            if (key !== 'area0') {
+              this.address += result[key].name + ' '
+            }
+          }
+        }
+      )
     },
   },
 }
