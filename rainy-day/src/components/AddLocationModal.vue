@@ -1,19 +1,58 @@
 <template>
   <dialog
     open
-    @click.self="handleOutSideClick">
+    @click.self="handleModalClose">
     <div class="modal">
       <h3>장소 추가하기</h3>
-      <label>
-        장소 이름
+      <div class="input-container">
+        <label for="name"> 장소이름 </label>
         <input
           type="text"
-          v-model="name" />
+          v-model="name"
+          id="name" />
         <button
+          class="delete"
           v-if="name"
-          id="close"
-          @click="handleDeleteClick"></button>
-      </label>
+          @click="deleteName"></button>
+      </div>
+      <div class="input-container">
+        <label for="zipcode">주소</label>
+        <button
+          @click="handleSearch"
+          class="button-main-color">
+          검색
+        </button>
+        <input
+          type="text"
+          v-model="zipcode"
+          id="zipcode"
+          class="address"
+          disabled />
+      </div>
+      <label
+        class="a11y-hidden"
+        for="address"
+        >주소</label
+      >
+      <input
+        type="text"
+        v-model="address"
+        id="address"
+        class="address"
+        disabled />
+      <div class="button-container">
+        <button
+          type="button"
+          class="button-sub-color"
+          @click="handleModalClose">
+          취소하기
+        </button>
+        <button
+          type="button"
+          class="button-main-color">
+          추가하기
+        </button>
+      </div>
     </div>
   </dialog>
 </template>
@@ -23,15 +62,17 @@ export default {
   data() {
     return {
       name: '',
+      zipcode: '',
     }
   },
   methods: {
-    handleOutSideClick() {
+    handleModalClose() {
       this.$emit('closeModal')
     },
-    handleDeleteClick() {
+    deleteName() {
       this.name = ''
     },
+    handleSearch() {},
   },
 }
 </script>
@@ -45,11 +86,15 @@ dialog {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+  z-index: 99999;
 }
 .modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
   width: 40rem;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -60,24 +105,47 @@ dialog {
     text-align: center;
     font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
-  label {
+  .input-container {
+    display: flex;
+    align-items: center;
     position: relative;
-    > input {
-      width: 28rem;
-      margin-left: 2rem;
-      border-bottom: 1px solid #bcbcbc;
-      padding-right: 2rem;
+    > label {
+      width: 6rem;
+      margin-right: 1rem;
+      flex-shrink: 0;
     }
-    > button {
-      position: absolute;
-      right: 0;
-      top: 0.3rem;
-      width: 1.8rem;
-      height: 1.8rem;
-      background: url('/src/assets/images/icon-close.svg') center/ 1.8rem 1.8rem no-repeat;
-    }
+  }
+  #name {
+    width: 100%;
+    border: 1px solid #d4d4d4;
+    padding: 0.5rem 2.5rem 0.5rem 0.5rem;
+    border-radius: 3px;
+  }
+  .address {
+    padding: 0.5rem 2rem;
+    border-radius: 3px;
+    border: 1px solid #d4d4d4;
+    background-color: #f4f4f4;
+  }
+  .delete {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.8rem;
+    height: 1.8rem;
+    background: url('/src/assets/images/icon-close.svg') center/ 1.8rem 1.8rem no-repeat;
+  }
+  #zipcode {
+    width: 10rem;
+    margin-left: 1rem;
+  }
+  .button-container {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-around;
   }
 }
 </style>
