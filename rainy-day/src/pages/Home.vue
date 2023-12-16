@@ -60,11 +60,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 h1 {
-  margin-top: 5rem;
+  margin: 5rem 0;
   text-align: center;
   font-size: 3.2rem;
 }
 main {
-  margin: 0 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  align-items: center;
 }
 </style>

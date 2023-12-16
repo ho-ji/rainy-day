@@ -1,5 +1,5 @@
 <template lang="">
-  <section>
+  <section class="card">
     <h2>
       {{ title }} <span>{{ address }}</span>
     </h2>
@@ -78,16 +78,23 @@ export default {
 </script>
 <style lang="scss" scoped>
 section {
-  width: 100rem;
-  height: 50rem;
-  background-color: red;
-}
-#info {
-  display: flex;
-  justify-content: space-between;
-}
-#map {
-  width: 50rem;
-  height: 50rem;
+  height: 40rem;
+  h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    > span {
+      margin-left: 1rem;
+      font-size: 1.6rem;
+      color: #666;
+    }
+  }
+  #info {
+    display: flex;
+    justify-content: space-between;
+  }
+  #map {
+    width: 30rem;
+    height: 30rem;
+  }
 }
 </style>

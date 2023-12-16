@@ -37,11 +37,18 @@
       id="address"
       class="address"
       disabled />
-    <button
-      type="button"
-      class="button-main-color">
-      추가하기
-    </button>
+    <div class="button-container">
+      <button
+        type="button"
+        class="button-main-color">
+        추가하기
+      </button>
+      <button
+        type="button"
+        class="button-sub-color">
+        닫기
+      </button>
+    </div>
   </section>
 </template>
 <script>
@@ -62,20 +69,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.card {
+section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 40rem;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-  border-radius: 1rem;
-  background-color: white;
+
   h3 {
     text-align: center;
     font-size: 2rem;
     font-weight: bold;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
   .input-container {
     display: flex;
@@ -106,11 +109,17 @@ export default {
     transform: translateY(-50%);
     width: 1.8rem;
     height: 1.8rem;
-    background: url('/src/assets/images/icon-close.svg') center/ 1.8rem 1.8rem no-repeat;
+    background: url('/src/assets/images/delete.svg') center/ 1.8rem 1.8rem no-repeat;
   }
   #zipcode {
     width: 10rem;
     margin-left: 1rem;
+  }
+  .button-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    margin-top: 2rem;
   }
 }
 </style>
