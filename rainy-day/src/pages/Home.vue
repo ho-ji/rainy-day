@@ -1,7 +1,7 @@
 <template>
   <h1>여기에 비가 오나요?</h1>
   <main>
-    <CurrentLocationWeather
+    <LocationWeatherCard
       v-for="item in location"
       :key="item"
       :title="item.title"
@@ -20,13 +20,13 @@
   <Footer />
 </template>
 <script>
-import CurrentLocationWeather from '@/components/CurrentLocationWeather.vue'
+import LocationWeatherCard from '@/components/LocationWeatherCard.vue'
 import AddLocationCard from '@/components/AddLocationCard.vue'
 import Footer from '@/components/Footer.vue'
 export default {
   name: 'Home',
   components: {
-    CurrentLocationWeather,
+    LocationWeatherCard,
     AddLocationCard,
     Footer,
   },
