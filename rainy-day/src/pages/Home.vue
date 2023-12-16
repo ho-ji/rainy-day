@@ -17,15 +17,18 @@
       v-else
       @show="showCard" />
   </main>
+  <Footer />
 </template>
 <script>
 import CurrentLocationWeather from '@/components/CurrentLocationWeather.vue'
 import AddLocationCard from '@/components/AddLocationCard.vue'
+import Footer from '@/components/Footer.vue'
 export default {
   name: 'Home',
   components: {
     CurrentLocationWeather,
     AddLocationCard,
+    Footer,
   },
   data() {
     return {
