@@ -28,14 +28,7 @@ export default {
     longitude: Number,
   },
   mounted() {
-    if (window.naver && window.naver.maps) {
-      this.initMap()
-    } else {
-      const script = document.createElement('script')
-      script.src = 'https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=afcltvotp4&submodules=geocoder'
-      script.onload = () => (window.naver.maps.onJSContentLoaded = this.initMap)
-      document.head.appendChild(script)
-    }
+    this.initMap()
   },
   methods: {
     initMap() {
