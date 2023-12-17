@@ -4,7 +4,7 @@
     <LocationWeatherCard
       v-for="item in location"
       :key="item"
-      :title="item.title"
+      :name="item.name"
       :latitude="item.latitude"
       :longitude="item.longitude" />
     <button
@@ -16,7 +16,8 @@
     </button>
     <AddLocationCard
       v-else
-      @show="showCard" />
+      @show="showCard"
+      @addLocation="addLocation" />
   </main>
   <Footer />
 </template>
@@ -45,16 +46,19 @@ export default {
       (position) => {
         const latitude = position.coords.latitude
         const longitude = position.coords.longitude
-        this.location.push({title: '현위치', latitude, longitude})
+        this.location.push({name: '현위치', latitude, longitude})
       },
       () => {
-        this.location.push({title: '기본위치', latitude: 37.552987017, longitude: 126.972591728})
+        this.location.push({name: '기본위치', latitude: 37.552987017, longitude: 126.972591728})
       }
     )
   },
   methods: {
     showCard() {
       this.isShowCard = !this.isShowCard
+    },
+    addLocation(name, latitude, longitude) {
+      this.location.push({name, latitude, longitude})
     },
   },
 }

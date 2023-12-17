@@ -1,7 +1,7 @@
 <template lang="">
   <section class="card">
     <h2>
-      {{ title }} <span>{{ address }}</span>
+      {{ name }} <span>{{ address }}</span>
     </h2>
     <div id="info">
       <table>
@@ -23,7 +23,7 @@ export default {
     }
   },
   props: {
-    title: String,
+    name: String,
     latitude: Number,
     longitude: Number,
   },
