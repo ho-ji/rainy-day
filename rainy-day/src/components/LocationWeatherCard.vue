@@ -3,11 +3,13 @@
     <h2>
       {{ name }} <span>{{ address }}</span>
     </h2>
-    <div id="info">
+    <div class="info">
       <table>
         weather info
       </table>
-      <div id="map"></div>
+      <div
+        ref="map"
+        class="map"></div>
     </div>
   </section>
 </template>
@@ -32,7 +34,7 @@ export default {
   },
   methods: {
     initMap() {
-      const container = document.getElementById('map')
+      const container = this.$refs.map
       const options = {
         center: new window.naver.maps.LatLng(this.latitude, this.longitude),
         zoom: 15,
@@ -81,11 +83,11 @@ section {
       color: #666;
     }
   }
-  #info {
+  .info {
     display: flex;
     justify-content: space-between;
   }
-  #map {
+  .map {
     width: 30rem;
     height: 30rem;
   }

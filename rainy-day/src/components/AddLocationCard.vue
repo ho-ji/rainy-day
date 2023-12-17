@@ -43,7 +43,8 @@
     <div class="button-container">
       <button
         type="button"
-        class="button-main-color">
+        class="button-main-color"
+        @click="handleAddClick">
         추가하기
       </button>
       <button
@@ -83,6 +84,18 @@ export default {
           this.zipcode = data.zonecode
         },
       }).embed(wrapper)
+    },
+    handleAddClick() {
+      window.naver.maps.Service.geocode(
+        {
+          query: this.address,
+        },
+        (status, response) => {
+          if (status === window.naver.maps.Service.Status.ERROR) return
+          const position = response.v2.addresses[0]
+          this.$emit('addLocation', this.name, Number(position.y), Number(position.x))
+        }
+      )
     },
   },
 }
