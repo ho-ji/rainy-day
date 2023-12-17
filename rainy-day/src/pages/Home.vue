@@ -10,7 +10,8 @@
     <button
       v-if="!isShowCard"
       type="button"
-      @click="showCard">
+      @click="showCard"
+      class="add">
       장소 추가
     </button>
     <AddLocationCard
@@ -69,5 +70,13 @@ main {
   flex-direction: column;
   gap: 5rem;
   align-items: center;
+  .add {
+    color: var(--main-color);
+    padding-left: 2.2rem;
+    background: url('/src/assets/images/add.svg') no-repeat left/2rem 2rem;
+    &:hover {
+      opacity: 0.5;
+    }
+  }
 }
 </style>

@@ -10,7 +10,9 @@
       <button
         class="delete"
         v-if="name"
-        @click="deleteName"></button>
+        @click="deleteName">
+        <span class="a11y-hidden">쓴내용 삭제</span>
+      </button>
     </div>
     <div class="input-container">
       <label for="zipcode">주소</label>
@@ -45,7 +47,8 @@
       </button>
       <button
         type="button"
-        class="button-sub-color">
+        class="button-sub-color"
+        @click="closeCard">
         닫기
       </button>
     </div>
@@ -63,6 +66,9 @@ export default {
   methods: {
     deleteName() {
       this.name = ''
+    },
+    closeCard() {
+      this.$emit('show')
     },
     handleSearch() {},
   },
