@@ -39,6 +39,7 @@
       id="address"
       class="address"
       disabled />
+    <section ref="wrapper"></section>
     <div class="button-container">
       <button
         type="button"
@@ -61,6 +62,7 @@ export default {
     return {
       name: '',
       zipcode: '',
+      address: '',
     }
   },
   methods: {
@@ -70,7 +72,18 @@ export default {
     closeCard() {
       this.$emit('show')
     },
-    handleSearch() {},
+    handleSearch() {
+      const wrapper = this.$refs.wrapper
+      this.address = ''
+      this.zipcode = ''
+      new window.daum.Postcode({
+        width: 600,
+        oncomplete: (data) => {
+          this.address = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress
+          this.zipcode = data.zonecode
+        },
+      }).embed(wrapper)
+    },
   },
 }
 </script>
@@ -103,7 +116,7 @@ section {
     border-radius: 3px;
   }
   .address {
-    padding: 0.5rem 2rem;
+    padding: 0.5rem 1rem;
     border-radius: 3px;
     border: 1px solid #d4d4d4;
     background-color: #f4f4f4;
@@ -120,6 +133,9 @@ section {
   #zipcode {
     width: 10rem;
     margin-left: 1rem;
+  }
+  > section {
+    margin: 0 auto;
   }
   .button-container {
     display: flex;
