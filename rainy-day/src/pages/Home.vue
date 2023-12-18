@@ -16,7 +16,7 @@
     </button>
     <AddLocationCard
       v-else
-      @show="showCard"
+      @close="showCard"
       @addLocation="addLocation" />
   </main>
   <Footer />
@@ -59,6 +59,7 @@ export default {
     },
     addLocation(name, latitude, longitude) {
       this.location.push({name, latitude, longitude})
+      this.isShowCard = false
     },
   },
 }

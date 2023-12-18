@@ -71,7 +71,7 @@ export default {
       this.name = ''
     },
     closeCard() {
-      this.$emit('show')
+      this.$emit('close')
     },
     handleSearch() {
       const wrapper = this.$refs.wrapper
@@ -86,12 +86,20 @@ export default {
       }).embed(wrapper)
     },
     handleAddClick() {
+      if (this.address === '') {
+        alert('주소를 추가해주세요')
+        return
+      }
       window.naver.maps.Service.geocode(
         {
           query: this.address,
         },
         (status, response) => {
           if (status === window.naver.maps.Service.Status.ERROR) return
+          if (response.v2.meta.totalCount === 0) {
+            alert('잘못된 주소입니다. 다른 주소로 검색해주세요.')
+            return
+          }
           const position = response.v2.addresses[0]
           this.$emit('addLocation', this.name, Number(position.y), Number(position.x))
         }
