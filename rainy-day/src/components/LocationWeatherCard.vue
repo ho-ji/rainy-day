@@ -14,6 +14,7 @@
   </section>
 </template>
 <script>
+import axios from 'axios'
 export default {
   name: 'CurrentLocationWeather',
 
@@ -31,6 +32,7 @@ export default {
   },
   mounted() {
     this.initMap()
+    this.initWeather()
   },
   methods: {
     initMap() {
@@ -67,6 +69,64 @@ export default {
           }
         }
       )
+    },
+    initWeather() {
+      const serviceKey = 'UWkURKHp6eGygDVrRnYP2wroHOWGo2zCBd7phHPGGtlulhllM321P03rrBPg2gju%2BxQFrMPyIIbwnaNMV0%2BMDA%3D%3D'
+      const {x, y} = this.convertXY()
+      const {time, date} = this.getBaseDate()
+      const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=${serviceKey}&dataType=JSON&base_date=${date}&base_time=${time}&nx=${x}&ny=${y}`
+      axios
+        .get(url)
+        .then((response) => {})
+        .catch((error) => {})
+    },
+    convertXY() {
+      const RE = 6371.00877 // 지구 반경(km)
+      const GRID = 5.0 // 격자 간격(km)
+      const SLAT1 = 30.0 // 투영 위도1(degree)
+      const SLAT2 = 60.0 // 투영 위도2(degree)
+      const OLON = 126.0 // 기준점 경도(degree)
+      const OLAT = 38.0 // 기준점 위도(degree)
+      const XO = 43 // 기준점 X좌표(GRID)
+      const YO = 136
+
+      const DEGRAD = Math.PI / 180.0
+
+      const re = RE / GRID
+      const slat1 = SLAT1 * DEGRAD
+      const slat2 = SLAT2 * DEGRAD
+      const olon = OLON * DEGRAD
+      const olat = OLAT * DEGRAD
+
+      let sn = Math.tan(Math.PI * 0.25 + slat2 * 0.5) / Math.tan(Math.PI * 0.25 + slat1 * 0.5)
+      sn = Math.log(Math.cos(slat1) / Math.cos(slat2)) / Math.log(sn)
+      let sf = Math.tan(Math.PI * 0.25 + slat1 * 0.5)
+      sf = (Math.pow(sf, sn) * Math.cos(slat1)) / sn
+      let ro = Math.tan(Math.PI * 0.25 + olat * 0.5)
+      ro = (re * sf) / Math.pow(ro, sn)
+      const rs = {}
+      let ra = Math.tan(Math.PI * 0.25 + this.latitude * DEGRAD * 0.5)
+      ra = (re * sf) / Math.pow(ra, sn)
+      let theta = this.longitude * DEGRAD - olon
+      if (theta > Math.PI) theta -= 2.0 * Math.PI
+      if (theta < -Math.PI) theta += 2.0 * Math.PI
+      theta *= sn
+      rs['x'] = Math.floor(ra * Math.sin(theta) + XO + 0.5)
+      rs['y'] = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5)
+      return rs
+    },
+    getBaseDate() {
+      const today = new Date()
+      let date = today.getFullYear() + String(today.getMonth() + 1).padStart(2, 0)
+      let time = ''
+      if (today.getHours() === 0 && today.getMinutes() < 41) {
+        date += String(today.getDate() - 1).padStart(2, 0)
+        time = '2300'
+      } else {
+        date += String(today.getDate()).padStart(2, 0)
+        time = String(today.getHours()).padStart(2, 0) + '00'
+      }
+      return {date, time}
     },
   },
 }
