@@ -4,7 +4,8 @@
       {{ name }} <span>{{ address }}</span>
     </h2>
     <div class="info">
-      <table>
+      <div v-if="isError">ERROR</div>
+      <table v-else>
         weather info
       </table>
       <div
@@ -23,6 +24,8 @@ export default {
       map: null,
       marker: null,
       address: '',
+      weather: [],
+      isError: false,
     }
   },
   props: {
@@ -74,11 +77,25 @@ export default {
       const serviceKey = 'UWkURKHp6eGygDVrRnYP2wroHOWGo2zCBd7phHPGGtlulhllM321P03rrBPg2gju%2BxQFrMPyIIbwnaNMV0%2BMDA%3D%3D'
       const {x, y} = this.convertXY()
       const {time, date} = this.getBaseDate()
-      const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst?serviceKey=${serviceKey}&dataType=JSON&base_date=${date}&base_time=${time}&nx=${x}&ny=${y}`
+      const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${serviceKey}&numOfRows=1000&pageNo=1&dataType=JSON&base_date=${date}&base_time=${time}&nx=${x}&ny=${y}`
       axios
         .get(url)
-        .then((response) => {})
-        .catch((error) => {})
+        .then((response) => {
+          const data = response.data.response.body.items.item
+          const result = data.filter((i) => i.category === 'SKY' || i.category === 'PTY' || i.category === 'POP' || i.category === 'TMP')
+          //TMP SKY PTY POP 순서
+          for (let i = 0; i < result.length - 4; i += 4) {
+            const temp = {}
+            temp.weather = result[i + 2].fcstValue === '0' ? '-' + result[i + 1].fcstValue : result[i + 2].fcstValue
+            temp.temp = result[i].fcstValue
+            temp.rainPercent = result[i + 3].fcstValue
+            temp.time = result[i].fcstTime.slice(0, 2)
+            this.weather.push(temp)
+          }
+        })
+        .catch(() => {
+          this.isError = true
+        })
     },
     convertXY() {
       const RE = 6371.00877 // 지구 반경(km)
@@ -119,12 +136,13 @@ export default {
       const today = new Date()
       let date = today.getFullYear() + String(today.getMonth() + 1).padStart(2, 0)
       let time = ''
-      if (today.getHours() === 0 && today.getMinutes() < 41) {
+      if (today.getHours() <= 2 && today.getMinutes() < 15) {
         date += String(today.getDate() - 1).padStart(2, 0)
         time = '2300'
       } else {
         date += String(today.getDate()).padStart(2, 0)
-        time = String(today.getHours()).padStart(2, 0) + '00'
+        if (today.getMinutes() < 15) time = String(3 * parseInt(today.getHours() / 3) - 1).padStart(2, 0) + '00'
+        else time = String(3 * parseInt((today.getHours() + 1) / 3) - 1).padStart(2, 0) + '00'
       }
       return {date, time}
     },
