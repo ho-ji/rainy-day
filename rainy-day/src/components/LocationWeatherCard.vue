@@ -99,9 +99,10 @@ export default {
             temp.weather = result[i + 2].fcstValue === '0' ? '-' + result[i + 1].fcstValue : result[i + 2].fcstValue
             temp.temp = result[i].fcstValue
             temp.rainPercent = result[i + 3].fcstValue
-            temp.time = parseInt(result[i].fcstTime.slice(0, 2)) + '시'
+            temp.time = parseInt(result[i].fcstTime.slice(0, 2))
+            temp.isNight = temp.time < 7 || temp.time > 17
+            temp.time += '시'
             if (temp.time === '0시') temp.time = dateText.pop()
-
             temp.id = uuidv4()
             this.info.push(temp)
           }
@@ -182,6 +183,8 @@ section {
       display: flex;
       width: 100%;
       border: 1px solid #eee;
+      border-top: 2px solid var(--main-color);
+      border-radius: 3px;
       overflow-x: scroll;
     }
     .map {
