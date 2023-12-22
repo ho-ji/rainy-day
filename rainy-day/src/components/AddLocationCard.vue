@@ -5,7 +5,8 @@
       <label for="name"> 장소이름 </label>
       <input
         type="text"
-        v-model="name"
+        :value="name"
+        @input="name = $event.target.value"
         id="name" />
       <button
         class="delete"
