@@ -5,9 +5,14 @@
     </h2>
     <div class="info">
       <div v-if="isError">ERROR</div>
-      <table v-else>
-        weather info
-      </table>
+      <ul
+        class="list"
+        v-else>
+        <WeatherListItem
+          v-for="value in info"
+          :key="value.id"
+          :info="value" />
+      </ul>
       <div
         ref="map"
         class="map"></div>
@@ -16,15 +21,19 @@
 </template>
 <script>
 import axios from 'axios'
+import WeatherListItem from './WeatherListItem.vue'
+import {v4 as uuidv4} from 'uuid'
 export default {
-  name: 'CurrentLocationWeather',
-
+  name: 'LocationWeatherCard',
+  components: {
+    WeatherListItem,
+  },
   data() {
     return {
       map: null,
       marker: null,
       address: '',
-      weather: [],
+      info: [],
       isError: false,
     }
   },
@@ -83,14 +92,18 @@ export default {
         .then((response) => {
           const data = response.data.response.body.items.item
           const result = data.filter((i) => i.category === 'SKY' || i.category === 'PTY' || i.category === 'POP' || i.category === 'TMP')
+          let dateText = ['글피', '모레', '내일']
           //TMP SKY PTY POP 순서
           for (let i = 0; i < result.length - 4; i += 4) {
             const temp = {}
             temp.weather = result[i + 2].fcstValue === '0' ? '-' + result[i + 1].fcstValue : result[i + 2].fcstValue
             temp.temp = result[i].fcstValue
             temp.rainPercent = result[i + 3].fcstValue
-            temp.time = result[i].fcstTime.slice(0, 2)
-            this.weather.push(temp)
+            temp.time = parseInt(result[i].fcstTime.slice(0, 2)) + '시'
+            if (temp.time === '0시') temp.time = dateText.pop()
+
+            temp.id = uuidv4()
+            this.info.push(temp)
           }
         })
         .catch(() => {
@@ -151,9 +164,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 section {
-  height: 40rem;
+  height: 38rem;
   h2 {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     font-size: 2rem;
     > span {
       margin-left: 1rem;
@@ -164,10 +177,18 @@ section {
   .info {
     display: flex;
     justify-content: space-between;
-  }
-  .map {
-    width: 30rem;
-    height: 30rem;
+    gap: 2rem;
+    .list {
+      display: flex;
+      width: 100%;
+      border: 1px solid #eee;
+      overflow-x: scroll;
+    }
+    .map {
+      flex-shrink: 0;
+      width: 30rem;
+      height: 30rem;
+    }
   }
 }
 </style>
