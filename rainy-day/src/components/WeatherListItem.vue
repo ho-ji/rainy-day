@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li ref="list">
     <div class="time">
       <span ref="time">
         {{ info.time }}
@@ -8,7 +8,7 @@
     <p
       ref="weather"
       class="weather">
-      <span class="a11y-hidden">{{ weatherText }}</span>
+      <span class="tooltip">{{ weatherText }}</span>
     </p>
     <p>{{ info.temp }}°</p>
     <p class="rain-percent">{{ info.rainPercent }}%</p>
@@ -62,6 +62,8 @@ export default {
     },
   },
   mounted() {
+    const list = this.$refs.list
+
     const weather = this.$refs.weather
     weather.classList.add(this.weatherClass())
 
@@ -84,8 +86,8 @@ li {
   .date {
     background-color: var(--main-color);
     color: white;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
+    padding: 0.2rem 0.8rem;
+    border-radius: 15px;
   }
   .time {
     border-bottom: 1px solid #eee;
@@ -98,6 +100,20 @@ li {
     height: 5rem;
     background-size: cover;
     margin-top: 2rem;
+    &:hover {
+      .tooltip {
+        display: inline-block;
+      }
+    }
+    .tooltip {
+      display: none;
+      position: absolute;
+      font-size: 1.4rem;
+      transform: translate(-50%, 50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 0 0.5rem;
+    }
   }
   .sunny {
     background-position: 0 0;

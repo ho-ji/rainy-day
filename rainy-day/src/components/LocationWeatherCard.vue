@@ -57,6 +57,8 @@ export default {
         draggable: false,
         keyboardShortcuts: false,
         scrollWheel: false,
+        mapDataControl: false,
+        scaleControl: false,
       }
       this.map = new window.naver.maps.Map(container, options)
       this.markers = new window.naver.maps.Marker({
@@ -165,9 +167,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 section {
-  height: 38rem;
   h2 {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     font-size: 2rem;
     > span {
       margin-left: 1rem;
@@ -187,10 +188,13 @@ section {
       border-radius: 3px;
       overflow-x: scroll;
     }
+    .list::-webkit-scrollbar {
+      display: none;
+    }
     .map {
       flex-shrink: 0;
-      width: 30rem;
-      height: 30rem;
+      width: 20rem;
+      height: 20rem;
     }
   }
 }
