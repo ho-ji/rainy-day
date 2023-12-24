@@ -79,7 +79,7 @@ export default {
       this.address = ''
       this.zipcode = ''
       new window.daum.Postcode({
-        width: 600,
+        width: 400,
         oncomplete: (data) => {
           this.address = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress
           this.zipcode = data.zonecode
@@ -114,6 +114,7 @@ section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  width: 40rem;
 
   h3 {
     text-align: center;
