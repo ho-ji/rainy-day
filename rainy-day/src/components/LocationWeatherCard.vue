@@ -7,6 +7,7 @@
       <div v-if="isError">ERROR</div>
       <ul
         class="list"
+        ref="list"
         v-else>
         <WeatherListItem
           v-for="value in info"
@@ -35,6 +36,9 @@ export default {
       address: '',
       info: [],
       isError: false,
+      isMouseDown: false,
+      startX: 0,
+      scrollLeft: 0,
     }
   },
   props: {
@@ -45,6 +49,21 @@ export default {
   mounted() {
     this.initMap()
     this.initWeather()
+
+    const list = this.$refs.list
+    list.addEventListener('mousedown', (e) => {
+      this.isMouseDown = true
+      this.startX = e.pageX - list.offsetLeft
+      this.scrollLeft = list.scrollLeft
+    })
+    list.addEventListener('mouseup', () => (this.isMouseDown = false))
+    list.addEventListener('mouseleave', () => (this.isMouseDown = false))
+    list.addEventListener('mousemove', (e) => {
+      if (!this.isMouseDown) return
+      const currentX = e.pageX - list.offsetLeft
+      const prevScrollLeft = parseInt(currentX - this.startX)
+      list.scrollLeft = this.scrollLeft - prevScrollLeft
+    })
   },
   methods: {
     initMap() {
