@@ -1,5 +1,5 @@
 <template>
-  <li ref="list">
+  <li>
     <div class="time">
       <span ref="time">
         {{ info.time }}
@@ -62,8 +62,6 @@ export default {
     },
   },
   mounted() {
-    const list = this.$refs.list
-
     const weather = this.$refs.weather
     weather.classList.add(this.weatherClass())
 
