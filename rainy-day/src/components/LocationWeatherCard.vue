@@ -5,15 +5,23 @@
     </h2>
     <div class="info">
       <div v-if="isError">ERROR</div>
-      <ul
-        class="list"
-        ref="list"
-        v-else>
-        <WeatherListItem
-          v-for="value in info"
-          :key="value.id"
-          :info="value" />
-      </ul>
+      <div
+        v-else
+        class="list-container">
+        <div
+          v-if="info.length === 0"
+          class="loading">
+          <span class="a11y-hidden">날씨정보 로딩중</span>
+        </div>
+        <ul
+          class="list"
+          ref="list">
+          <WeatherListItem
+            v-for="value in info"
+            :key="value.id"
+            :info="value" />
+        </ul>
+      </div>
       <div
         ref="map"
         class="map"></div>
@@ -49,23 +57,24 @@ export default {
   mounted() {
     this.initMap()
     this.initWeather()
-
-    const list = this.$refs.list
-    list.addEventListener('mousedown', (e) => {
-      this.isMouseDown = true
-      this.startX = e.pageX - list.offsetLeft
-      this.scrollLeft = list.scrollLeft
-    })
-    list.addEventListener('mouseup', () => (this.isMouseDown = false))
-    list.addEventListener('mouseleave', () => (this.isMouseDown = false))
-    list.addEventListener('mousemove', (e) => {
-      if (!this.isMouseDown) return
-      const currentX = e.pageX - list.offsetLeft
-      const prevScrollLeft = parseInt(currentX - this.startX)
-      list.scrollLeft = this.scrollLeft - prevScrollLeft
-    })
   },
   methods: {
+    addEventListDrag() {
+      const list = this.$refs.list
+      list.addEventListener('mousedown', (e) => {
+        this.isMouseDown = true
+        this.startX = e.pageX - list.offsetLeft
+        this.scrollLeft = list.scrollLeft
+      })
+      list.addEventListener('mouseup', () => (this.isMouseDown = false))
+      list.addEventListener('mouseleave', () => (this.isMouseDown = false))
+      list.addEventListener('mousemove', (e) => {
+        if (!this.isMouseDown) return
+        const currentX = e.pageX - list.offsetLeft
+        const prevScrollLeft = parseInt(currentX - this.startX)
+        list.scrollLeft = this.scrollLeft - prevScrollLeft
+      })
+    },
     initMap() {
       const container = this.$refs.map
       const options = {
@@ -127,6 +136,7 @@ export default {
             temp.id = uuidv4()
             this.info.push(temp)
           }
+          this.addEventListDrag()
         })
         .catch(() => {
           this.isError = true
@@ -199,15 +209,28 @@ section {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    .list {
-      display: flex;
-      width: 100%;
+    .list-container {
+      flex: 1;
+      overflow-x: scroll;
       border: 1px solid #eee;
       border-top: 2px solid var(--main-color);
       border-radius: 3px;
-      overflow-x: scroll;
+      position: relative;
+      .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 3rem;
+        height: 3rem;
+        background: url('/src/assets/images/loading.gif') no-repeat center/ cover;
+      }
+      .list {
+        display: flex;
+        height: 100%;
+      }
     }
-    .list::-webkit-scrollbar {
+    .list-container::-webkit-scrollbar {
       display: none;
     }
     .map {
