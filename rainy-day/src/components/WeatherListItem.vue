@@ -100,6 +100,7 @@ li {
     height: 5rem;
     background-size: cover;
     margin-top: 2rem;
+    position: relative;
     &:hover {
       .tooltip {
         display: inline-block;
@@ -107,7 +108,9 @@ li {
     }
     .tooltip {
       display: none;
+      min-width: max-content;
       position: absolute;
+      bottom: 0;
       font-size: 1.4rem;
       transform: translate(-50%, 50%);
       background-color: rgba(0, 0, 0, 0.5);
