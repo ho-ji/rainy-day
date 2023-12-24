@@ -7,15 +7,14 @@
       <div v-if="isError">ERROR</div>
       <div
         v-else
-        class="list-container">
+        class="list-container"
+        ref="list">
         <div
           v-if="info.length === 0"
           class="loading">
           <span class="a11y-hidden">날씨정보 로딩중</span>
         </div>
-        <ul
-          class="list"
-          ref="list">
+        <ul class="list">
           <WeatherListItem
             v-for="value in info"
             :key="value.id"
