@@ -101,11 +101,11 @@ li {
     position: relative;
     &:hover {
       .tooltip {
-        display: inline-block;
+        visibility: visible;
       }
     }
     .tooltip {
-      display: none;
+      visibility: hidden;
       min-width: max-content;
       position: absolute;
       bottom: 0;
