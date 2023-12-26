@@ -160,7 +160,7 @@ export default {
         .then((response) => {
           const data = response.data.response.body.items.item
           const result = data.filter((i) => i.category === 'SKY' || i.category === 'PTY' || i.category === 'POP' || i.category === 'TMP')
-          let dateText = ['글피', '모레', '내일']
+          let dateText = ['오늘', '내일', '모레', '글피']
           //TMP SKY PTY POP 순서
           for (let i = 0; i < result.length - 4; i += 4) {
             const temp = {}
@@ -170,7 +170,8 @@ export default {
             temp.time = parseInt(result[i].fcstTime.slice(0, 2))
             temp.isNight = temp.time < 7 || temp.time > 17
             temp.time += '시'
-            if (temp.time === '0시') temp.time = dateText.pop()
+            if (temp.time === '0시') dateText.shift()
+            temp.date = dateText[0]
             temp.id = uuidv4()
             this.info.push(temp)
           }

@@ -2,7 +2,7 @@
   <li>
     <div class="time">
       <span ref="time">
-        {{ info.time }}
+        {{ info.time === '0시' ? info.date : info.time }}
       </span>
     </div>
     <p
@@ -66,7 +66,7 @@ export default {
     weather.classList.add(this.weatherClass())
 
     const time = this.$refs.time
-    if (this.info.time.substr(-1) !== '시') time.classList.add('date')
+    if (this.info.time === '0시') time.classList.add('date')
   },
 }
 </script>
