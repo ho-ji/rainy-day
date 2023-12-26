@@ -7,19 +7,34 @@
       <div v-if="isError">ERROR</div>
       <div
         v-else
-        class="list-container"
-        ref="list">
+        class="list-container">
         <div
           v-if="info.length === 0"
           class="loading">
           <span class="a11y-hidden">날씨정보 로딩중</span>
         </div>
-        <ul class="list">
+        <button
+          type="button"
+          class="page-button left"
+          @click="clickScrollLeft"
+          v-if="scrollLeft > 0">
+          <span class="a11y-hidden">스크롤 왼쪽 이동</span>
+        </button>
+        <ul
+          class="list"
+          ref="list">
           <WeatherListItem
             v-for="value in info"
             :key="value.id"
             :info="value" />
         </ul>
+        <button
+          type="button"
+          class="page-button right"
+          @click="clickScrollRight"
+          v-if="showRightButton">
+          <span class="a11y-hidden">스크롤 오른쪽 이동</span>
+        </button>
       </div>
       <div
         ref="map"
@@ -46,6 +61,7 @@ export default {
       isMouseDown: false,
       startX: 0,
       scrollLeft: 0,
+      showRightButton: true,
     }
   },
   props: {
@@ -58,7 +74,23 @@ export default {
     this.initWeather()
   },
   methods: {
-    addEventListDrag() {
+    clickScrollLeft() {
+      const list = this.$refs.list
+      this.scrollLeft = list.scrollLeft - 500
+      list.scrollBy({
+        left: -500,
+        behavior: 'smooth',
+      })
+    },
+    clickScrollRight() {
+      const list = this.$refs.list
+      this.scrollLeft = list.scrollLeft + 500
+      list.scrollBy({
+        left: 500,
+        behavior: 'smooth',
+      })
+    },
+    addEventListScroll() {
       const list = this.$refs.list
       list.addEventListener('mousedown', (e) => {
         this.isMouseDown = true
@@ -72,6 +104,13 @@ export default {
         const currentX = e.pageX - list.offsetLeft
         const prevScrollLeft = parseInt(currentX - this.startX)
         list.scrollLeft = this.scrollLeft - prevScrollLeft
+      })
+      list.addEventListener('scroll', () => {
+        if (list.scrollWidth - list.clientWidth < list.scrollLeft) {
+          this.showRightButton = false
+        } else {
+          this.showRightButton = true
+        }
       })
     },
     initMap() {
@@ -135,7 +174,7 @@ export default {
             temp.id = uuidv4()
             this.info.push(temp)
           }
-          this.addEventListDrag()
+          this.addEventListScroll()
         })
         .catch(() => {
           this.isError = true
@@ -210,7 +249,7 @@ section {
     gap: 2rem;
     .list-container {
       flex: 1;
-      overflow-x: scroll;
+      overflow-x: hidden;
       border: 1px solid #eee;
       border-top: 2px solid var(--main-color);
       border-radius: 3px;
@@ -226,11 +265,30 @@ section {
       }
       .list {
         display: flex;
+        max-width: 100%;
         height: 100%;
+        overflow-x: scroll;
       }
-    }
-    .list-container::-webkit-scrollbar {
-      display: none;
+      .list::-webkit-scrollbar {
+        display: none;
+      }
+      .page-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        z-index: 1;
+        width: 3rem;
+        height: 3rem;
+      }
+      .left {
+        left: 1rem;
+        background: url('/src/assets/images/left-arrow.svg') no-repeat center var(--main-color);
+      }
+      .right {
+        right: 1rem;
+        background: url('/src/assets/images/right-arrow.svg') no-repeat center var(--main-color);
+      }
     }
     .map {
       flex-shrink: 0;

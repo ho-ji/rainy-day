@@ -9,6 +9,10 @@ html {
 body {
   line-height: 1.6;
   font-size: 1.6rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 :root {
   --main-color: #42a5f5;
