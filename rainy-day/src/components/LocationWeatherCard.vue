@@ -17,7 +17,7 @@
           type="button"
           class="page-button left"
           @click="clickScrollLeft"
-          v-if="scrollLeft > 0">
+          v-if="showLeftButton">
           <span class="a11y-hidden">스크롤 왼쪽 이동</span>
         </button>
         <ul
@@ -61,6 +61,7 @@ export default {
       isMouseDown: false,
       startX: 0,
       scrollLeft: 0,
+      showLeftButton: false,
       showRightButton: true,
     }
   },
@@ -106,11 +107,11 @@ export default {
         list.scrollLeft = this.scrollLeft - prevScrollLeft
       })
       list.addEventListener('scroll', () => {
-        if (list.scrollWidth - list.clientWidth < list.scrollLeft) {
-          this.showRightButton = false
-        } else {
-          this.showRightButton = true
-        }
+        if (list.scrollWidth - list.clientWidth <= list.scrollLeft) this.showRightButton = false
+        else this.showRightButton = true
+
+        if (list.scrollLeft > 0) this.showLeftButton = true
+        else this.showLeftButton = false
       })
     },
     initMap() {
