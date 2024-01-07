@@ -1,0 +1,105 @@
+.card {
+  position: relative;
+  > h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    > span {
+      margin-left: 1rem;
+      font-size: 1.6rem;
+      color: #666;
+    }
+  }
+  .info {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    .weather-list {
+      display: flex;
+      flex: 1;
+      border: 1px solid #eee;
+      border-top: 2px solid var(--main-color);
+      border-radius: 3px;
+      overflow-x: hidden;
+      position: relative;
+      .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 3rem;
+        height: 3rem;
+        background: url('/src/assets/images/loading.gif') no-repeat center/ cover;
+      }
+      .label {
+        width: 6rem;
+        flex-shrink: 0;
+        border-right: 1px solid #eee;
+        text-align: center;
+        box-shadow: 2px 0px 20px rgba(200, 200, 200, 0.2);
+        z-index: 1;
+        .date {
+          padding: 1rem 0;
+          border-bottom: 1px solid #eee;
+          > span {
+            border-radius: 15px;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            background-color: var(--main-color);
+          }
+        }
+        > img {
+          margin-top: 2rem;
+          width: 5rem;
+        }
+      }
+      .container {
+        width: calc(100% - 6rem);
+        position: relative;
+        .list {
+          display: flex;
+          height: 100%;
+          overflow-x: scroll;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+        .page-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: 50%;
+          z-index: 1;
+          width: 3rem;
+          height: 3rem;
+        }
+        .left {
+          left: 1rem;
+          background: url('/src/assets/images/left-arrow.svg') no-repeat center var(--main-color);
+        }
+        .right {
+          right: 1rem;
+          background: url('/src/assets/images/right-arrow.svg') no-repeat center var(--main-color);
+        }
+      }
+    }
+    .map {
+      flex-shrink: 0;
+      width: 20rem;
+      height: 20rem;
+    }
+  }
+  .delete {
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: url('/src/assets/images/close.svg') center / 2rem 2rem no-repeat;
+    &:hover {
+      background-color: #eee;
+    }
+  }
+}

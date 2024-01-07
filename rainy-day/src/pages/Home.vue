@@ -76,23 +76,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-h1 {
-  margin: 5rem 0;
-  text-align: center;
-  font-size: 3.2rem;
-}
-main {
-  display: flex;
-  flex-direction: column;
-  gap: 5rem;
-  align-items: center;
-  .add {
-    color: var(--main-color);
-    padding-left: 2.2rem;
-    background: url('/src/assets/images/add.svg') no-repeat left/2rem 2rem;
-    &:hover {
-      opacity: 0.5;
-    }
-  }
-}
+@import '../assets/scss/pages/home.scss';
 </style>

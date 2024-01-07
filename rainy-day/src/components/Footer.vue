@@ -10,17 +10,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-footer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  background: #fff;
-  padding: 10rem 0;
-  color: #ccc;
-  text-align: center;
-  border-top: 1px solid #ccc;
-  margin-top: 10rem;
-}
+@import '../assets/scss/components/footer.scss';
 </style>
