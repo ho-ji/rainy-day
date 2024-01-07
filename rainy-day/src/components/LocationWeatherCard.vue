@@ -126,7 +126,7 @@ export default {
         const prevScrollLeft = parseInt(currentX - this.startX)
         list.scrollLeft = this.scrollLeft - prevScrollLeft
       })
-      list.addEventListener('scroll', (e) => {
+      list.addEventListener('scroll', () => {
         if (list.scrollWidth - list.clientWidth <= list.scrollLeft) this.showRightButton = false
         else this.showRightButton = true
 
