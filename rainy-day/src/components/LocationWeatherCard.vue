@@ -3,43 +3,60 @@
     <h2>
       {{ name }} <span>{{ address }}</span>
     </h2>
-    <div class="info">
-      <div v-if="isError">ERROR</div>
-      <div
-        v-else
-        class="list-container">
+    <div v-if="isError">ERROR</div>
+    <div
+      v-else
+      class="info">
+      <section class="weather-list">
         <div
           v-if="info.length === 0"
           class="loading">
           <span class="a11y-hidden">날씨정보 로딩중</span>
         </div>
-        <button
-          type="button"
-          class="page-button left"
-          @click="clickScrollLeft"
-          v-if="showLeftButton">
-          <span class="a11y-hidden">스크롤 왼쪽 이동</span>
-        </button>
-        <ul
-          class="list"
-          ref="list">
-          <WeatherListItem
-            v-for="value in info"
-            :key="value.id"
-            :info="value" />
-        </ul>
-        <button
-          type="button"
-          class="page-button right"
-          @click="clickScrollRight"
-          v-if="showRightButton">
-          <span class="a11y-hidden">스크롤 오른쪽 이동</span>
-        </button>
-      </div>
+        <div class="label">
+          <div class="date">
+            <span>{{ dateText }}</span>
+          </div>
+          <img
+            :src="logoImage"
+            alt="기상청 API" />
+        </div>
+        <div class="container">
+          <button
+            type="button"
+            class="page-button left"
+            @click="clickScrollLeft"
+            v-if="showLeftButton">
+            <span class="a11y-hidden">스크롤 왼쪽 이동</span>
+          </button>
+          <ul
+            class="list"
+            ref="list">
+            <WeatherListItem
+              v-for="value in info"
+              :key="value.id"
+              :info="value" />
+          </ul>
+          <button
+            type="button"
+            class="page-button right"
+            @click="clickScrollRight"
+            v-if="showRightButton">
+            <span class="a11y-hidden">스크롤 오른쪽 이동</span>
+          </button>
+        </div>
+      </section>
       <div
         ref="map"
         class="map"></div>
     </div>
+    <button
+      type="button"
+      v-if="index !== 0"
+      @click="deleteLocation"
+      class="delete">
+      <span class="a11y-hidden">장소 삭제</span>
+    </button>
   </section>
 </template>
 <script>
@@ -63,12 +80,15 @@ export default {
       scrollLeft: 0,
       showLeftButton: false,
       showRightButton: true,
+      dateText: '오늘',
+      logoImage: require('/src/assets/images/logo.svg'),
     }
   },
   props: {
     name: String,
     latitude: Number,
     longitude: Number,
+    index: Number,
   },
   mounted() {
     this.initMap()
@@ -106,12 +126,13 @@ export default {
         const prevScrollLeft = parseInt(currentX - this.startX)
         list.scrollLeft = this.scrollLeft - prevScrollLeft
       })
-      list.addEventListener('scroll', () => {
+      list.addEventListener('scroll', (e) => {
         if (list.scrollWidth - list.clientWidth <= list.scrollLeft) this.showRightButton = false
         else this.showRightButton = true
 
         if (list.scrollLeft > 0) this.showLeftButton = true
         else this.showLeftButton = false
+        this.dateText = this.info[parseInt(list.scrollLeft / 60)].date
       })
     },
     initMap() {
@@ -231,12 +252,16 @@ export default {
       }
       return {date, time}
     },
+    deleteLocation() {
+      this.$emit('deleteLocation', this.index)
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
-section {
-  h2 {
+.card {
+  position: relative;
+  > h2 {
     margin-bottom: 2rem;
     font-size: 2rem;
     > span {
@@ -249,12 +274,13 @@ section {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
-    .list-container {
+    .weather-list {
+      display: flex;
       flex: 1;
-      overflow-x: hidden;
       border: 1px solid #eee;
       border-top: 2px solid var(--main-color);
       border-radius: 3px;
+      overflow-x: hidden;
       position: relative;
       .loading {
         position: absolute;
@@ -265,37 +291,74 @@ section {
         height: 3rem;
         background: url('/src/assets/images/loading.gif') no-repeat center/ cover;
       }
-      .list {
-        display: flex;
-        max-width: 100%;
-        height: 100%;
-        overflow-x: scroll;
-      }
-      .list::-webkit-scrollbar {
-        display: none;
-      }
-      .page-button {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        border-radius: 50%;
+      .label {
+        width: 6rem;
+        flex-shrink: 0;
+        border-right: 1px solid #eee;
+        text-align: center;
+        box-shadow: 2px 0px 20px rgba(200, 200, 200, 0.2);
         z-index: 1;
-        width: 3rem;
-        height: 3rem;
+        .date {
+          padding: 1rem 0;
+          border-bottom: 1px solid #eee;
+          > span {
+            border-radius: 15px;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            background-color: var(--main-color);
+          }
+        }
+        > img {
+          margin-top: 2rem;
+          width: 5rem;
+        }
       }
-      .left {
-        left: 1rem;
-        background: url('/src/assets/images/left-arrow.svg') no-repeat center var(--main-color);
-      }
-      .right {
-        right: 1rem;
-        background: url('/src/assets/images/right-arrow.svg') no-repeat center var(--main-color);
+      .container {
+        width: calc(100% - 6rem);
+        position: relative;
+        .list {
+          display: flex;
+          height: 100%;
+          overflow-x: scroll;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+        .page-button {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: 50%;
+          z-index: 1;
+          width: 3rem;
+          height: 3rem;
+        }
+        .left {
+          left: 1rem;
+          background: url('/src/assets/images/left-arrow.svg') no-repeat center var(--main-color);
+        }
+        .right {
+          right: 1rem;
+          background: url('/src/assets/images/right-arrow.svg') no-repeat center var(--main-color);
+        }
       }
     }
     .map {
       flex-shrink: 0;
       width: 20rem;
       height: 20rem;
+    }
+  }
+  .delete {
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    background: url('/src/assets/images/close.svg') center / 2rem 2rem no-repeat;
+    &:hover {
+      background-color: #eee;
     }
   }
 }

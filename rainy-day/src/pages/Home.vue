@@ -2,11 +2,13 @@
   <h1>여기에 비가 오나요?</h1>
   <main>
     <LocationWeatherCard
-      v-for="item in location"
+      v-for="(item, index) in location"
       :key="item"
       :name="item.name"
       :latitude="item.latitude"
-      :longitude="item.longitude" />
+      :longitude="item.longitude"
+      :index="index"
+      @deleteLocation="deleteLoction" />
     <button
       v-if="!isShowCard"
       type="button"
@@ -47,9 +49,13 @@ export default {
         const latitude = position.coords.latitude
         const longitude = position.coords.longitude
         this.location.push({name: '현위치', latitude, longitude})
+        const places = JSON.parse(localStorage.getItem('weatherPlaces'))
+        if (places) this.location.push(...places)
       },
       () => {
         this.location.push({name: '기본위치', latitude: 37.552987017, longitude: 126.972591728})
+        const places = JSON.parse(localStorage.getItem('weatherPlaces'))
+        if (places) this.location.push(...places)
       }
     )
   },
@@ -60,6 +66,11 @@ export default {
     addLocation(name, latitude, longitude) {
       this.location.push({name, latitude, longitude})
       this.isShowCard = false
+      localStorage.setItem('weatherPlaces', JSON.stringify(this.location.slice(1)))
+    },
+    deleteLoction(index) {
+      this.location.splice(index, 1)
+      localStorage.setItem('weatherPlaces', JSON.stringify(this.location.slice(1)))
     },
   },
 }
