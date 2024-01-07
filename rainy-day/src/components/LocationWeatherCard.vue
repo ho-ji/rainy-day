@@ -320,6 +320,8 @@ export default {
           display: flex;
           height: 100%;
           overflow-x: scroll;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
           &::-webkit-scrollbar {
             display: none;
           }
