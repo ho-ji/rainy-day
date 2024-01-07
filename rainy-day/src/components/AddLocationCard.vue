@@ -1,5 +1,7 @@
 <template>
-  <section class="card">
+  <section
+    class="card"
+    ref="add">
     <h3>장소 추가하기</h3>
     <div class="input-container">
       <label for="name"> 장소이름 </label>
@@ -68,6 +70,13 @@ export default {
     }
   },
   methods: {
+    moveScroll() {
+      const add = this.$refs.add
+      window.scrollTo({
+        top: add.offsetTop - 20,
+        behavior: 'smooth',
+      })
+    },
     deleteName() {
       this.name = ''
     },
@@ -85,6 +94,7 @@ export default {
           this.zipcode = data.zonecode
         },
       }).embed(wrapper)
+      this.moveScroll()
     },
     handleAddClick() {
       if (this.address === '') {
@@ -107,6 +117,9 @@ export default {
       )
     },
   },
+  mounted() {
+    this.moveScroll()
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -114,7 +127,7 @@ section {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 40rem;
+  width: 45rem;
 
   h3 {
     text-align: center;
