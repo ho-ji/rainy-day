@@ -192,7 +192,7 @@ export default {
             temp.time = parseInt(result[i].fcstTime.slice(0, 2))
             temp.isNight = temp.time < 7 || temp.time > 17
             temp.time += '시'
-            if (temp.time === '0시') dateText.shift()
+            if (i !== 0 && temp.time === '0시') dateText.shift()
             temp.date = dateText[0]
             temp.id = uuidv4()
             this.info.push(temp)
