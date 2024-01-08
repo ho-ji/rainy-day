@@ -61,9 +61,26 @@ body {
   transition: 0.3s;
   border-radius: 5px;
   background-color: white;
-  padding: 3rem 2rem;
-  width: 80rem;
+  padding: 3rem 2.2rem;
+  width: 100rem;
   &:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+@media screen and (max-width: 1024px) {
+  .card {
+    width: 70rem;
+    padding: 2rem 2.2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 1.4rem;
+  }
+  .card {
+    width: 90%;
+    min-width: 45rem;
+    padding: 1.5rem 2.2rem;
   }
 }

@@ -78,3 +78,27 @@ li {
     color: var(--main-color);
   }
 }
+@media screen and (max-width: 1024px) {
+  li {
+    width: 5rem;
+    .date {
+      padding: 0.2rem 0.6rem;
+    }
+    .time {
+      padding: 0.8rem 0;
+    }
+    .weather {
+      width: 4.5rem;
+      height: 4.5rem;
+      margin-top: 1.8rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  li {
+    .weather {
+      margin-top: 0.8rem;
+    }
+  }
+}

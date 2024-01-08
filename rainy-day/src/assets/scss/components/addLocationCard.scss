@@ -1,4 +1,4 @@
-section {
+.location {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -53,5 +53,26 @@ section {
     flex-direction: row-reverse;
     justify-content: space-between;
     margin-top: 2rem;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .location {
+    gap: 1.2rem;
+    h3 {
+      margin-bottom: 1rem;
+    }
+    .button-container {
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .location {
+    gap: 1rem;
+    min-width: 45rem;
+    h3 {
+      margin-bottom: 0.5rem;
+    }
   }
 }

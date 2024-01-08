@@ -1,6 +1,6 @@
 <template>
   <section
-    class="card"
+    class="card location"
     ref="add">
     <h3>장소 추가하기</h3>
     <div class="input-container">

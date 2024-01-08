@@ -1,5 +1,5 @@
 <template lang="">
-  <section class="card">
+  <section class="card section">
     <h2>
       {{ name }} <span>{{ address }}</span>
     </h2>
