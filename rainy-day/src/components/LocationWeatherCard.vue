@@ -176,7 +176,7 @@ export default {
       const serviceKey = 'UWkURKHp6eGygDVrRnYP2wroHOWGo2zCBd7phHPGGtlulhllM321P03rrBPg2gju%2BxQFrMPyIIbwnaNMV0%2BMDA%3D%3D'
       const {x, y} = this.convertXY()
       const {time, date} = this.getBaseDate()
-      const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${serviceKey}&numOfRows=1000&pageNo=1&dataType=JSON&base_date=${date}&base_time=${time}&nx=${x}&ny=${y}`
+      const url = `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${serviceKey}&numOfRows=1000&pageNo=1&dataType=JSON&base_date=${date}&base_time=${time}&nx=${x}&ny=${y}`
       axios
         .get(url)
         .then((response) => {
