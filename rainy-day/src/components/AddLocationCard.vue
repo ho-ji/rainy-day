@@ -88,7 +88,7 @@ export default {
       this.address = ''
       this.zipcode = ''
       new window.daum.Postcode({
-        width: 400,
+        width: '100%',
         oncomplete: (data) => {
           this.address = data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress
           this.zipcode = data.zonecode
