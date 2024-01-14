@@ -8,11 +8,6 @@
       v-else
       class="info">
       <section class="weather-list">
-        <div
-          v-if="info.length === 0"
-          class="loading">
-          <span class="a11y-hidden">날씨정보 로딩중</span>
-        </div>
         <div class="label">
           <div class="date">
             <span>{{ dateText }}</span>
@@ -22,6 +17,11 @@
             alt="기상청 API" />
         </div>
         <div class="container">
+          <div
+            v-if="info.length === 0"
+            class="loading">
+            <span class="a11y-hidden">날씨정보 로딩중</span>
+          </div>
           <button
             type="button"
             class="page-button left"
